@@ -25,11 +25,11 @@ RUN wget https://github.com/Pathoschild/SMAPI/releases/download/4.1.10/SMAPI-4.1
     /bin/bash -c "SMAPI_NO_TERMINAL=true SMAPI_USE_CURRENT_SHELL=true echo -e \"2\n\n\" | /data/nexus/SMAPI\ 4.1.10\ installer/internal/linux/SMAPI.Installer --install --game-path \"/data/Stardew/Stardew Valley\"" || :
 
 # Add Mods & Scripts
-COPY docker/mods/ /data/Stardew/Stardew\ Valley/Mods/
+COPY docker/mods/ "/data/Stardew/Stardew Valley/Mods/"
 COPY docker/scripts/ /opt/
 
 # Set permissions
-RUN chmod +x /data/Stardew/Stardew\ Valley/StardewValley && \
+RUN chmod +x "/data/Stardew/Stardew Valley/StardewValley" && \
     chmod -R 777 /data/Stardew/ && \
     chown -R 1000:1000 /data/Stardew && \
     chmod +x /opt/*.sh
