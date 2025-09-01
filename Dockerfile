@@ -25,8 +25,8 @@ RUN wget https://github.com/Pathoschild/SMAPI/releases/download/4.1.10/SMAPI-4.1
     /bin/bash -c "SMAPI_NO_TERMINAL=true SMAPI_USE_CURRENT_SHELL=true echo -e \"2\n\n\" | /data/nexus/SMAPI\ 4.1.10\ installer/internal/linux/SMAPI.Installer --install --game-path \"/data/Stardew/Stardew Valley\"" || :
 
 # Add Mods & Scripts
-COPY mods/ /data/Stardew/Stardew\ Valley/Mods/
-COPY scripts/ /opt/
+COPY docker/mods/ /data/Stardew/Stardew\ Valley/Mods/
+COPY docker/scripts/ /opt/
 
 # Set permissions
 RUN chmod +x /data/Stardew/Stardew\ Valley/StardewValley && \
@@ -36,10 +36,10 @@ RUN chmod +x /data/Stardew/Stardew\ Valley/StardewValley && \
 
 # Configure services
 RUN mkdir /etc/services.d/utils && touch /etc/services.d/app/utils.dep
-COPY run /etc/services.d/utils/run 
+COPY docker/run /etc/services.d/utils/run 
 RUN chmod +x /etc/services.d/utils/run 
 
-COPY docker-entrypoint.sh /startapp.sh
+COPY docker/docker-entrypoint.sh /startapp.sh
 
 # Expose ports
 EXPOSE 5900 5800 24642/udp
