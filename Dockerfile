@@ -1,4 +1,4 @@
-FROM jlesage/baseimage-gui:debian-10
+FROM --platform=linux/amd64 jlesage/baseimage-gui:debian-10
 
 ENV APP_NAME="StardewValley"
 
