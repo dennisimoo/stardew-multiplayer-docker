@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  stardew:
+    container_name: stardew-server
+    build: .
+    restart: unless-stopped
+    ports:
+      # Stardew multiplayer server port
+      - "24642:24642/udp"
+      # VNC desktop (remote access enabled)
+      - "0.0.0.0:2342:5900"
+      # Web VNC (noVNC in browser, remote access enabled)
+      - "0.0.0.0:8080:5800"
+    environment:
+      - VNC_PASSWORD=nyanyanya
+      - DISPLAY_HEIGHT=900
+      - DISPLAY_WIDTH=1200
+      - ENABLE_ALWAYSONSERVER_MOD=true
+      - ENABLE_UNLIMITEDPLAYERS_MOD=true
+      - ENABLE_AUTOLOADGAME_MOD=true
+      - ENABLE_REMOTECONTROL_MOD=true
+      - ENABLE_SAVEBACKUP_MOD=true
+    volumes:
+      # Persist game saves
+      - ./valley_saves:/config/xdg/config/StardewValley/Saves
+      # Autoload config
+      - ./configs/autoload.json:/data/Stardew/Stardew Valley/Mods/AutoLoadGame/config.json
