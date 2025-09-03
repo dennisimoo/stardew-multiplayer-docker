@@ -34,11 +34,11 @@ RUN wget https://github.com/Pathoschild/SMAPI/releases/download/4.1.10/SMAPI-4.1
     unzip /data/nexus.zip -d /data/nexus/ && \
     /bin/bash -c "SMAPI_NO_TERMINAL=true SMAPI_USE_CURRENT_SHELL=true echo -e \"2\n\n\" | /data/nexus/SMAPI\ 4.1.10\ installer/internal/linux/SMAPI.Installer --install --game-path \"/data/Stardew/Stardew Valley\"" || :
 
-# Add Mods & Scripts
+# Add Mods & Scripts first
 COPY ["mods/", "/data/Stardew/Stardew Valley/Mods/"]
 COPY scripts/ /opt/
 
-# Copy the AutoLoadGame config file to fix mod errors
+# Now copy the AutoLoadGame config file after mods are in place
 COPY configs/autoload.json /data/Stardew/Stardew\ Valley/Mods/AutoLoadGame/config.json
 
 RUN chmod +x /data/Stardew/Stardew\ Valley/StardewValley && \
