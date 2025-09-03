@@ -1,0 +1,13 @@
+services:
+  stardew:
+    image: kasmweb/ubuntu-jammy-desktop:1.15.0
+    container_name: stardew-web
+    platform: ${DOCKER_PLATFORM:-linux/arm64}
+    ports:
+      - "6901:6901"
+      - "24642:24642/udp"
+    environment:
+      - VNC_PW=nyanyanya
+    volumes:
+      - ./valley_saves:/home/kasm-user/Saves
+    shm_size: 512m
