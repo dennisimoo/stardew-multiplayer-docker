@@ -2,7 +2,9 @@ version: '2.2'
 
 services:
   valley:
-    build: .
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
     container_name: stardew
     platform: linux/arm64
     environment:

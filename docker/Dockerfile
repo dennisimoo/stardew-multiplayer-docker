@@ -19,12 +19,20 @@ RUN apt-get update && apt-get install -y wget gnupg ca-certificates \
 #    install_app_icon.sh "$APP_ICON_URL"
 
 # Clean up any existing Stardew directory and extract game files properly
-RUN rm -rf /data/Stardew && \
-    mkdir -p /data/Stardew && \
-    mkdir -p /data/nexus && \
-    wget https://eris.cc/Stardew_1.6.15.tar.gz -qO /data/latest.tar.gz && \
-    tar xf /data/latest.tar.gz -C /data/Stardew --strip-components=1 && \
-    rm /data/latest.tar.gz 
+# Ensure final path is "/data/Stardew/Stardew Valley" so SMAPI and COPY targets exist
+RUN set -eux; \
+    rm -rf /data/Stardew; \
+    mkdir -p /data/Stardew /data/nexus /data/_extract; \
+    wget https://eris.cc/Stardew_1.6.15.tar.gz -qO /data/latest.tar.gz; \
+    tar xf /data/latest.tar.gz -C /data/_extract; \
+    mkdir -p "/data/Stardew/Stardew Valley"; \
+    if [ -d "/data/_extract/Stardew Valley" ]; then \
+        cp -a "/data/_extract/Stardew Valley/." "/data/Stardew/Stardew Valley/"; \
+    else \
+        cp -a /data/_extract/. "/data/Stardew/Stardew Valley/"; \
+    fi; \
+    mkdir -p "/data/Stardew/Stardew Valley/Mods"; \
+    rm -rf /data/latest.tar.gz /data/_extract
 
 # Use .NET runtime
 RUN wget -qO dotnet.tar.gz https://download.visualstudio.microsoft.com/download/pr/6788a5a5-1879-4095-948d-72c7fbdf350f/c996151548ec9f24d553817db64c3577/dotnet-sdk-5.0.402-linux-x64.tar.gz \
