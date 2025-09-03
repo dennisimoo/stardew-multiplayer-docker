@@ -1,5 +1,5 @@
-# Pull base image.
-FROM jlesage/baseimage-gui:debian-11
+# Pull base image for ARM64 (Ampere servers)
+FROM --platform=linux/arm64 jlesage/baseimage-gui:debian-11
 
 # Set the name of the application.
 ENV APP_NAME="StardewValley"
@@ -18,8 +18,8 @@ RUN mkdir -p /data/Stardew && \
     tar xf /data/latest.tar.gz -C /data/Stardew && \
     rm /data/latest.tar.gz 
 
-RUN wget -qO dotnet.tar.gz https://download.visualstudio.microsoft.com/download/pr/6788a5a5-1879-4095-948d-72c7fbdf350f/c996151548ec9f24d553817db64c3577/dotnet-sdk-5.0.402-linux-x64.tar.gz \
-    #RUN wget -qO dotnet.tar.gz https://download.visualstudio.microsoft.com/download/pr/95352809-7f41-40f3-974d-8d530321a8e4/0024d7bf0c872f176ceba7a63a34915b/dotnet-runtime-6.0.0-linux-musl-x64.tar.gz \
+# Use ARM64 .NET runtime for Ampere servers
+RUN wget -qO dotnet.tar.gz https://download.visualstudio.microsoft.com/download/pr/95352809-7f41-40f3-974d-8d530321a8e4/0024d7bf0c872f176ceba7a63a34915b/dotnet-runtime-6.0.0-linux-musl-x64.tar.gz \
     && tar -zxf dotnet.tar.gz -C /usr/share/dotnet \
     && rm dotnet.tar.gz \
     && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet 
