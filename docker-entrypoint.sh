@@ -1,14 +1,15 @@
 #!/bin/bash
 set -euo pipefail
 export HOME=/config
-
-# Minimal launch without mods/SMAPI
 export XAUTHORITY=~/.Xauthority
 
-# Ensure launcher uses xterm so we can see logs in the GUI
-if grep -q 'env TERM=xterm \$LAUNCHER' "/data/Stardew/Stardew Valley/StardewValley" 2>/dev/null; then
-  sed -i -e 's/env TERM=xterm $LAUNCHER \"$@\"$/env SHELL=\\/bin\\/bash TERM=xterm xterm -e \"\\/bin\\/bash -c $LAUNCHER \"$@\"\"/' \
-    "/data/Stardew/Stardew Valley/StardewValley" || true
-fi
+GAME_DIR="/data/Stardew/Stardew Valley"
+GAME_BIN="$GAME_DIR/StardewValley"
 
-exec bash -c "/data/Stardew/Stardew\\ Valley/StardewValley"
+# Make sure game is executable and run from its directory
+mkdir -p "$GAME_DIR"
+chmod +x "$GAME_BIN" 2>/dev/null || true
+cd "$GAME_DIR" || exit 1
+
+# Launch via xterm to surface any errors in the GUI
+exec xterm -fa Monospace -fs 11 -hold -e "$GAME_BIN"

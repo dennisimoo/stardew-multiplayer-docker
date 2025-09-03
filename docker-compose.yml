@@ -6,7 +6,7 @@ services:
       context: ./docker
       dockerfile: Dockerfile
     container_name: stardew
-    platform: linux/arm64
+    platform: linux/amd64
     environment:
       - "VNC_PASSWORD=nyanyanya"
       - "DISPLAY_HEIGHT=900"
