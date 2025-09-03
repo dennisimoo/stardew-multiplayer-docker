@@ -2,12 +2,14 @@ version: '2.2'
 
 services:
   valley:
-    build: docker
+    build: .
     container_name: stardew
+    platform: linux/arm64
     environment:
       - "VNC_PASSWORD=nyanyanya"
       - "DISPLAY_HEIGHT=900"
       - "DISPLAY_WIDTH=1200"
+      - "X11VNC_EXTRA_OPTS=-noxdamage -noxcomposite -nowf -noscr"
       ## Always On Server mod
       # Removing this will probably defeat the point of ever using this?
       - ENABLE_ALWAYSONSERVER_MOD=${ENABLE_ALWAYSONSERVER_MOD-true}
