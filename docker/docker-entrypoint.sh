@@ -1,41 +1,15 @@
 #!/bin/bash
+set -euo pipefail
 export HOME=/config
-
-for modPath in /data/Stardew/Stardew\ Valley/Mods/*/
-do
-  mod=$(basename "$modPath")
-
-  # Normalize mod name ot uppercase and only characters, eg. "Always On Server" => ENABLE_ALWAYSONSERVER_MOD
-  var="ENABLE_$(echo "${mod^^}" | tr -cd '[A-Z]')_MOD"
-
-  # Remove the mod if it's not enabled
-  if [ "${!var}" != "true" ]; then
-    echo "Removing ${modPath} (${var}=${!var})"
-    rm -rf "$modPath"
-    continue
-  fi
-
-  if [ -f "${modPath}/config.json.template" ]; then
-    echo "Configuring ${modPath}config.json"
-
-    # Seed the config.json only if one isn't manually mounted in (or is empty)
-    if [ "$(cat "${modPath}config.json" 2> /dev/null)" == "" ]; then
-      envsubst < "${modPath}config.json.template" > "${modPath}config.json"
-    fi
-  fi
-done
-
-# Run extra steps for certain mods
-/opt/configure-remotecontrol-mod.sh
-
-/opt/tail-smapi-log.sh &
-
-# Ready to start!
-
 export XAUTHORITY=~/.Xauthority
-TERM=
-sed -i -e 's/env TERM=xterm $LAUNCHER "$@"$/env SHELL=\/bin\/bash TERM=xterm xterm  -e "\/bin\/bash -c $LAUNCHER "$@""/' /data/Stardew/Stardew\ Valley/StardewValley
 
-bash -c "/data/Stardew/Stardew\ Valley/StardewValley"
+GAME_DIR="/data/Stardew/Stardew Valley"
+GAME_BIN="$GAME_DIR/StardewValley"
 
-sleep 233333333333333
+# Make sure game is executable and run from its directory
+mkdir -p "$GAME_DIR"
+chmod +x "$GAME_BIN" 2>/dev/null || true
+cd "$GAME_DIR" || exit 1
+
+# Launch via xterm to surface any errors in the GUI
+exec xterm -fa Monospace -fs 11 -hold -e bash -lc 'set -e; if [ -x ./StardewValley ]; then ./StardewValley; else mono "Stardew Valley.exe"; fi'
