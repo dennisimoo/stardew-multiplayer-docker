@@ -39,7 +39,8 @@ COPY ["mods/", "/data/Stardew/Stardew Valley/Mods/"]
 COPY scripts/ /opt/
 
 # Now copy the AutoLoadGame config file after mods are in place
-COPY configs/autoload.json /data/Stardew/Stardew\ Valley/Mods/AutoLoadGame/config.json
+# Use JSON-array form to handle spaces in destination path
+COPY ["configs/autoload.json", "/data/Stardew/Stardew Valley/Mods/AutoLoadGame/config.json"]
 
 RUN chmod +x /data/Stardew/Stardew\ Valley/StardewValley && \
     chmod -R 777 /data/Stardew/ && \
