@@ -1,5 +1,5 @@
 # Pull base image for ARM64 (Ampere servers)
-FROM --platform=linux/arm64 jlesage/baseimage-gui:debian-11-arm64
+FROM --platform=linux/arm64 jlesage/baseimage-gui:debian-11
 
 # Set the name of the application.
 ENV APP_NAME="StardewValley"
