@@ -1,13 +1,13 @@
 # Pull base image for ARM64 (Ampere servers)
-FROM --platform=linux/arm64 jlesage/baseimage-gui:debian-11
+FROM jlesage/baseimage-gui:debian-11
 
 # Set the name of the application.
 ENV APP_NAME="StardewValley"
 
 # Expose the necessary ports
-EXPOSE 5800  # Web interface (noVNC)
-EXPOSE 5900  # VNC
-EXPOSE 24642/udp  # Stardew Valley multiplayer
+EXPOSE 5800
+EXPOSE 5900
+EXPOSE 24642/udp
 
 RUN apt-get update && apt-get install -y wget gnupg ca-certificates \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends mono-runtime mono-utils mono-devel xterm gettext-base jq netcat-openbsd procps unzip tar strace \
