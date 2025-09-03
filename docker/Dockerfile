@@ -34,31 +34,12 @@ RUN set -eux; \
     mkdir -p "/data/Stardew/Stardew Valley/Mods"; \
     rm -rf /data/latest.tar.gz /data/_extract
 
-# Use .NET runtime
-RUN wget -qO dotnet.tar.gz https://download.visualstudio.microsoft.com/download/pr/6788a5a5-1879-4095-948d-72c7fbdf350f/c996151548ec9f24d553817db64c3577/dotnet-sdk-5.0.402-linux-x64.tar.gz \
-    && tar -zxf dotnet.tar.gz -C /usr/share/dotnet \
-    && rm dotnet.tar.gz \
-    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet 
-
-RUN wget https://github.com/Pathoschild/SMAPI/releases/download/4.1.10/SMAPI-4.1.10-installer.zip -qO /data/nexus.zip && \
-    unzip /data/nexus.zip -d /data/nexus/ && \
-    /bin/bash -c "SMAPI_NO_TERMINAL=true SMAPI_USE_CURRENT_SHELL=true echo -e \"2\n\n\" | /data/nexus/SMAPI\ 4.1.10\ installer/internal/linux/SMAPI.Installer --install --game-path \"/data/Stardew/Stardew Valley\"" || :
-
-# Add Mods & Scripts first
-COPY ["mods/", "/data/Stardew/Stardew Valley/Mods/"]
-COPY scripts/ /opt/
-
-# Now copy the AutoLoadGame config file after mods are in place
-# Use JSON-array form to handle spaces in destination path
-COPY ["./configs/autoload.json", "/data/Stardew/Stardew Valley/Mods/AutoLoadGame/config.json"]
+## No mods mode: skip dotnet/SMAPI/mod copies
 
 RUN chmod +x /data/Stardew/Stardew\ Valley/StardewValley && \
     chmod -R 777 /data/Stardew/ && \
-    chown -R 1000:1000 /data/Stardew/ && \
-    chmod +x /opt/*.sh
+    chown -R 1000:1000 /data/Stardew/
 
-RUN mkdir /etc/services.d/utils && touch /etc/services.d/app/utils.dep
-COPY run /etc/services.d/utils/run 
-RUN chmod +x /etc/services.d/utils/run 
+## No extra s6 services needed in no-mods mode
 
 COPY docker-entrypoint.sh /startapp.sh

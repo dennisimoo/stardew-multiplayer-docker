@@ -140,7 +140,5 @@ services:
     volumes:
       # Saves go here now
       - ./valley_saves:/config/xdg/config/StardewValley/Saves
-      # If you'd like to set an existing savegame before the first start otherwise this file will be edited when starting the first game
-      - ./configs/autoload.json:/data/Stardew/Stardew Valley/Mods/AutoLoadGame/config.json
 
       
